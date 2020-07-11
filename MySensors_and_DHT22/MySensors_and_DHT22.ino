@@ -1,4 +1,20 @@
 /**
+ ********************************
+ *
+ * REVISION HISTORY
+ * Version 0.1: Erik Klessens
+ * 
+ * DESCRIPTION
+ * This sketch uses NRF24 for sending measurements ( Temperature / Humidity ) to Mysensors network
+ * Supported temperature sensors are : DHT11/DHT-22.
+ * For more information how to connect the sensor and NRF24 wireless module see  :
+ * http://www.mysensors.org/build/humidity
+ * 
+ ********************************
+ * Libraries in use : 
+ * Documentation: http://www.mysensors.org
+ * DHTNew library : https://github.com/RobTillaart/DHTNew ( Version 0.1.7 )
+ * 
  * The MySensors Arduino library handles the wireless radio link and protocol
  * between your home built sensors/actuators and HA controller of choice.
  * The sensors forms a self healing radio network with optional repeaters. Each
@@ -8,35 +24,23 @@
  * Created by Erik Klessens
  * Copyright (C) 20020 Erik Klessens
  *
+ * MySensors library : https://github.com/mysensors/MySensors
  * Documentation: http://www.mysensors.org
- * DHTNew library : https://github.com/RobTillaart/DHTNew ( Version 0.1.7 )
  * Support Forum: http://forum.mysensors.org
- *
- *******************************
- *
- * REVISION HISTORY
- * Version 0.1: Erik Klessens
  * 
- * DESCRIPTION
- * This sketch uses NRF24 for sending measurements ( Temperature / Humidity ) to Mysensors network
- * sensor using a DHT11/DHT-22.
- *  
- * For more information, please visit:
- * http://www.mysensors.org/build/humidity
- * 
+ * DHTNew library : https://github.com/RobTillaart/DHTNew ( Version 0.1.7 )
+ *
  */
 
+//--------- SETUP Variables --------------------------------------------------------------------
 // Enable debug prints
 #define MY_DEBUG
 
 // Enable and select radio type attached 
 #define MY_RADIO_RF24
-//#define MY_RADIO_RFM69
-//#define MY_RS485
  
 #include <SPI.h>
 #include <MySensors.h>  
-//#include <DHT.h>
 #include <dhtnew.h>
 
 // Set this to the pin you connected the DHT's data pin to
@@ -57,6 +61,8 @@ static const uint64_t UPDATE_INTERVAL = 60000;
 // i.e. the sensor would force sending an update every UPDATE_INTERVAL*FORCE_UPDATE_N_READS [ms]
 static const uint8_t FORCE_UPDATE_N_READS = 10;
 
+//--------- END SETUP Variables -----------------------------------------------------------------
+
 #define CHILD_ID_HUM 0
 #define CHILD_ID_TEMP 1
 
@@ -69,9 +75,7 @@ bool metric = true;
 MyMessage msgHum(CHILD_ID_HUM, V_HUM);
 MyMessage msgTemp(CHILD_ID_TEMP, V_TEMP);
 
-
 DHTNEW mySensor(DHT_DATA_PIN);
-
 
 void presentation()  
 { 
@@ -82,7 +86,7 @@ void presentation()
   present(CHILD_ID_HUM, S_HUM);
   present(CHILD_ID_TEMP, S_TEMP);
   
-  metric = getControllerConfig().isMetric;
+  metric = getControllerConfig().isMetric;  // Can be used to convert values from Metric to Imperial ( not in use at this moment ) 
 }
 
 
